@@ -1,0 +1,264 @@
+<html>
+ <head>
+ <style>
+ body{
+ background-color:eee;
+ }
+ #input_container{
+  width:50%;
+ }
+ #element_variable td{
+ width:30%;
+ }
+ .first,.second,.third{
+     width:100%;
+	 height:30px;
+ }
+ #butt_in{
+ width:30%;
+ height:40px;
+ }
+ 
+ </style>
+  <title>
+  Linear Programming Graphical Method
+  </title>
+  <meta>
+  
+  </meta>
+  <link rel="stylesheet" href="index.css">
+ </head>
+ <body>
+    <center>
+  <header>
+ <h1>Graphical Method Linear Programming</h1>
+  </header>
+   <div id="input_container">
+      <table id="element_variable">
+	  <tr classname="plotarray">
+	  <td>X1 <br/><input type="text" id="v1" class='first'></td>
+	  <td>X2<br/><input type="text" id="v1" class='second'></td>
+	  <td>constant<br/><input type="text" id="v1" class="third"></td>
+	  </tr>
+	  </table>
+	  <br/>
+	  <input type="submit" value="plot" id="butt_in" onclick="generate()">
+	  <input type="submit" value="add constraint"  id="butt_in" onclick="addC()">
+   </div>
+   <div>
+    <h1>Output</h1>
+	<div id="outputplot">
+	
+	</div>
+   </div>
+    <canvas id="testCanvas" width="600" height="600"> </canvas>
+  </center>
+    
+  
+  
+  
+  
+  
+  
+  
+  <script>
+  let constlist =[
+  {id:1, first:'input', second:"input",third:'inpute', remove:false}
+  
+  ]
+  localStorage.setItem('constraint',constlist)
+   function addC(){
+	 let a = document.createElement('tr');
+	 a.setAttribute('class','first_tr');
+	 let b = document.createElement('td');
+	 b.setAttribute('class','fir');
+	 let b2 = document.createElement('td');
+	 b2.setAttribute('class','sec');
+     let b3 = document.createElement('td');
+	 b3.setAttribute('class','thi');
+	 let c = document.createElement('input');
+	 c.setAttribute('class','first');
+	 let c2 = document.createElement('input');
+	 c2.setAttribute('class','second');
+     let c3 = document.createElement('input');
+	 c3.setAttribute('class','third');
+
+	 b.appendChild(c);
+	 b2.appendChild(c2);
+	 b3.appendChild(c3);
+	 a.appendChild(b);
+	 a.appendChild(b2);
+	 a.appendChild(b3);
+	 document.getElementById('element_variable').appendChild(a);
+	 
+	 
+	 }
+	 
+  function generateArray(){
+  let x = document.getElementById("v1").value
+  let y = document.getElementById("v2").value
+  let c = document.getElementById("c1").value
+  let point1 = []
+  let point2 = []
+  point1.push(0,c/y);
+  point2.push(c/x,0);
+  line((c/x),(c/y))
+  //document.write(point1)
+  let div = document.getElementById("outp");
+  //div.value = "(X,Y)::"+point1+"<br/>(X,Y)::"+point2;
+  // create a table here 
+  }
+//generateArray();
+
+
+
+function generate(){
+let constraint1 = []
+let constraint2 = []
+let constraint3 = []
+let f = document.getElementsByClassName("first")
+let s = document.getElementsByClassName("second")
+let th = document.getElementsByClassName("third")
+for(let i=0; i<f.length; i++){
+constraint1.push(f[i].value);
+constraint2.push(s[i].value);
+constraint3.push(th[i].value);
+}
+let result = [];
+let outinsert = []
+for(let i=0; i<constraint1.length; i++){
+result.push([(constraint3[i]/constraint1[i]),(constraint3[i]/constraint2[i])]);
+outinsert.push([(constraint3[i]/constraint1[i]),(constraint3[i]/constraint2[i])]);
+}
+let empt = [];
+let oo = document.getElementById("outputplot")
+for(let i=0; i<outinsert.length; i++){
+empt.push([i+1,':','X1 PLot:',outinsert[i][0],'X2 PLot:',outinsert[i][1]]);
+}
+oo.innerHTML = empt.toString();
+drawGraph(result);
+}
+
+//function draw graph of a array 
+function drawGraph(values){
+let linearValues = values;             //[[14,10],[10,8],[22,7],[50,10],[16,7],[10,5]];
+var canvas = document.getElementById( "testCanvas" );  
+    var context = canvas.getContext( "2d" );  
+    context.beginPath();  
+    context.moveTo(50,50);  
+    context.lineTo(50,550);  
+    context.lineTo(550,550);  
+    context.stroke();  
+	context.fillText("X1",10,60);
+	context.fillText("X2",530,580);
+	// draw a reference line
+	let count = 0;
+	for(let i=0; i<100; i++){
+	count = count + 5;
+	if(count >= 50 && count%50 == 0){
+	 context.beginPath(); 
+    context.strokeStyle = 'red';	
+   context.linewidth = 8;	
+    context.moveTo(50,550-count);  
+    context.lineTo(550,550-count);  
+    context.stroke(); 
+	}
+	else{
+	context.beginPath();  
+	context.strokeStyle = 'black';
+    context.moveTo(50,550-count);  
+    context.lineTo(550,550-count);  
+    context.stroke(); 
+	}
+	}
+	let count2 = 0;
+	for(let i=0; i<100; i++){
+	count2 = count2 + 5;
+	if(count2 >= 50 && count2%50 == 0){
+	 context.beginPath();  
+	     context.strokeStyle = 'red';	
+   context.linewidth = 8;	
+    context.moveTo(50+count2,550);  
+    context.lineTo(50+count2,50);   
+    context.stroke(); 
+	}
+	else{
+	context.beginPath();  
+	context.strokeStyle = 'black';	
+    context.moveTo(50+count2,550);  
+    context.lineTo(50+count2,50);   
+    context.stroke(); 
+	}
+	}
+	
+	// calibration x1
+	// seperate array
+	function seperate1(){
+	let sep1=[];
+	for(let i of linearValues){
+	sep1.push(i[0])
+	}
+	return sep1;
+	}
+	
+	function seperate2(){
+	let sep2=[];
+	for(let i of linearValues){
+	sep2.push(i[1])
+	}
+	return sep2;
+	}
+	let arrayLen1 = seperate1()
+	let arrayLen2 = seperate2()
+	
+	var largest1 = 0;  
+    for( var i = 0; i < arrayLen1.length; i++ ){  
+        if( arrayLen1[ i ] > largest1 ){  
+            largest1 = arrayLen1[ i ];  
+        }  
+    }  
+  var largest2 = 0;  
+    for( var i = 0; i < arrayLen2.length; i++ ){  
+        if( arrayLen2[ i ] > largest2 ){  
+            largest2 = arrayLen2[ i ];  
+        }  
+    }  
+  
+	  let calib1 = Math.ceil(largest1/10);
+	for(let i=0; i<11; i++){
+	context.fillText(calib1*i,30,550-(50*i));
+	}
+	
+	// calibration 0f x2
+	let calib2 = Math.ceil(largest2/10);
+	for(let i=0; i<11; i++){
+	context.fillText(calib2*i,50+(50*i),565);
+	}
+	 context.fillText("Scale: 10lines reps "+(calib1)+", each lines reps "+(calib1/10)+"@X1",200,20);
+	 context.fillText("Scale: 10lines reps "+(calib2)+", each lines reps "+(calib2/10)+"@X2",200,40);
+	 // content.fillText(`{calib2 reps 10lines, calib1/10 is each line}`,200,40);
+	//find position of value and plot graph
+	let pvalue1= [];
+	let pvalue2= [];
+	for(let i=0; i<linearValues.length; i++){
+	pvalue1.push(50+( 500-(linearValues[i][0]*500)/(calib1*10)))
+	pvalue2.push(50+((linearValues[i][1]*500)/(calib2*10)));
+	//document.write(pvalue1,pvalue2);
+     context.beginPath();  
+	 context.strokeStyle = 'black';	
+     context.moveTo(50,pvalue1[0]);  
+     context.lineTo(pvalue2[0],550);   
+      context.stroke(); 
+	  pvalue1.pop();
+	  pvalue2.pop();
+	}
+	
+  
+}
+
+
+  </script>
+  <footer>
+  </footer>
+ </body>
+</html>
